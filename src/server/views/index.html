@@ -1,0 +1,33 @@
+{% extends 'layout.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Movie Inventory</a>
+      </div>
+      <p class="navbar-text navbar-right"><a href="/movies/new" class="navbar-link">+ New Movie</a></p>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Inventory</h1>
+    <hr>
+    {% for movie in data %}
+      <div class="movie">
+        <img src="{{ movie.image_url }}" alt="movie poster" height="450" width="300">
+        <h4>{{ movie.title + " (" + movie.year + ")" }}</h4>
+        <p>{{movie.type}}
+        <p>Rating: {{movie.rating}}</p>
+        <form>
+          <button class="form-control edit" method="GET" action="/movies/{{movie.id}}/edit">Edit</button>
+        </form>
+      </div>
+    {% endfor %}
+
+  </div>
+
+{% endblock %}

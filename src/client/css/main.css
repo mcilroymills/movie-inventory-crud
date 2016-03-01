@@ -1,0 +1,27 @@
+* {
+  color: black;
+}
+
+body {
+  background-color: #2f363d;
+}
+
+img {
+  border-radius: 3px;
+}
+.movie {
+  float:left;
+  width: 350px;
+  height: 580px;
+  /*border: 3px solid red;
+  border-radius: 5px;*/
+  position:relative;
+  margin: 5px;
+  text-align: center;
+}
+
+.edit {
+  position: absolute;
+  right:    ;
+  bottom:   0;
+}
