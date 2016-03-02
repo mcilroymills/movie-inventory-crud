@@ -16,7 +16,7 @@
   <div class="container">
     <h1>Edit Movie</h1>
     <hr>
-    <form class="form-inline" method="POST" action="/movies">
+    <form class="form-inline" method="POST" action="/movies/{{data[0].id}}/edit">
       <div class="form-group">
         <label for="exampleInputName2">Title</label>
         <input type="title" class="form-control" id="title" name="title" value="{{data[0].title}}" required autofocus>

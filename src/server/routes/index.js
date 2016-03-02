@@ -25,24 +25,6 @@ router.get('/movies/new', function(req, res, next) {
 
 });
 
-//Creates a new movie in database
-router.post('/movies', function(req, res, next) {
-  console.log(req.body.title);
-  console.log(req.body.description);
-  console.log(req.body.imageUrl);
-  console.log(req.body.year);
-  console.log(req.body.rating);
-  console.log(req.body.notes);
-  console.log(req.body.type);
-  db.any("INSERT INTO movies (title,description,image_url,year,date_obtained,rating,notes,type) VALUES ('" + req.body.title + "','" + req.body.description + "','" + req.body.imageUrl + "'," + req.body.year + ", '2016-03-01' ," + req.body.rating + ",'" + req.body.notes + "','" + req.body.type + "');")
-    .then(function () {
-      res.status(200).redirect('/');
-    })
-    .catch(function (err) {
-      return next(err);
-    });
-});
-
 //Goes to edit page
 router.get('/movies/:id/edit', function(req, res, next) {
   db.any('SELECT * FROM movies WHERE id=' + req.params.id)//Returns an array
@@ -55,11 +37,10 @@ router.get('/movies/:id/edit', function(req, res, next) {
     });
 });
 
-//Deletes a movie from db
-router.post('/movies/:id/delete', function(req, res, next) {
-  db.any('SELECT * FROM movies WHERE id=' + req.params.id)//Returns an array
-    .then(function (data) {//Name the array var "data"
-      console.log(data);
+//Creates a new movie in database
+router.post('/movies', function(req, res, next) {
+  db.any("INSERT INTO movies (title,description,image_url,year,date_obtained,rating,notes,type) VALUES ('" + req.body.title + "','" + req.body.description + "','" + req.body.imageUrl + "'," + req.body.year + ", '2016-03-01' ," + req.body.rating + ",'" + req.body.notes + "','" + req.body.type + "');")
+    .then(function () {
       res.status(200).redirect('/');
     })
     .catch(function (err) {
@@ -67,5 +48,37 @@ router.post('/movies/:id/delete', function(req, res, next) {
     });
 });
 
+
+//Updates existing movie in database
+router.post('/movies/:id/edit', function(req, res, next) {
+  db.any("UPDATE movies SET title='" + req.body.title + "',description='" + req.body.description + "',image_url='" + req.body.imageUrl + "',year=" + req.body.year + ",rating=" + req.body.rating + ",notes='" + req.body.notes + "',type='" + req.body.type + "' WHERE id=" + req.params.id)
+    .then(function () {
+      res.status(200).redirect('/');
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
+//Deletes a movie from db
+router.post('/movies/:id/delete', function(req, res, next) {
+  db.any('DELETE FROM movies WHERE id=' + req.params.id)
+    .then(function (data) {
+      res.status(200).redirect('/');
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+  if (month.length < 2) month = '0' + month;
+  if (day.length < 2) day = '0' + day;
+  return [month, day, year].join('-');
+}
 
 module.exports = router;
