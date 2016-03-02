@@ -1,3 +1,7 @@
+/* Author: Mills McIlroy
+ * Date: March 2, 2016
+ * Description: Movie Inventory CRUD assignment. Avoided using any client-side javascript/jQuery!!
+ */
 var express = require('express');
 var router = express.Router();
 
@@ -8,14 +12,7 @@ var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://localhost:5432/movie_inventory_crud';
 var db = pgp(connectionString);
 
-//Keeps track of index page movie display
-var titleClicked = false;
-var yearClicked = false;
-var date_obtainedClicked = false;
-var ratingClicked = false;
-var typeClicked = false;
-
-//Returns all movies with basic info
+//Returns all movies with basic info, allows user to sort
 router.get('/', function(req, res, next) {
   console.log(req.query);
   if (req.query.title) {
@@ -66,24 +63,13 @@ router.get('/', function(req, res, next) {
   else {
     db.any('SELECT * FROM movies ORDER BY date_obtained DESC')//Returns an array
       .then(function (data) {//Name the array var "data"
-        res.status(200).render('index', { data:data, date_obtained:'desc' });
+        res.status(200).render('index', { data:data });
       })
       .catch(function (err) {
         return next(err);
       });
   }
 });
-
-/*/Returns all movies with basic info
-router.get('/?[column]=[asc/desc]', function(req, res, next) {
-  db.any('SELECT * FROM movies ORDER BY date_obtained')//Returns an array
-    .then(function (data) {//Name the array var "data"
-      res.status(200).render('index', { data:data });
-    })
-    .catch(function (err) {
-      return next(err);
-    });
-});*/
 
 //Goes to new movie page
 router.get('/movies/new', function(req, res, next) {
