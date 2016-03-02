@@ -16,6 +16,49 @@
   <div class="container">
     <h1>Inventory</h1>
     <hr>
+    <ul>
+      <li><strong>Sort by: </strong></li>
+    {% if !title %}
+      <li><a href="/?title=asc">Title</a> | </li>
+    {% endif %}
+    {% if title %}
+      {% if title === 'asc' %} <li><a href="/?title=desc">Title (descending) </a> | </li> {% endif %}
+      {% if title === 'desc' %} <li><a href="/?title=asc">Title (ascending)</a> | </li> {% endif %}
+    {% endif %}
+
+    {% if !year %}
+      <li><a href="/?year=asc">Year</a> | </li>
+    {% endif %}
+    {% if year %}
+      {% if year === 'asc' %} <li><a href="/?year=desc">Year (descending) </a> | </li> {% endif %}
+      {% if year === 'desc' %} <li><a href="/?year=asc">Year (ascending)</a> | </li> {% endif %}
+    {% endif %}
+
+    {% if !date_obtained %}
+      <li><a href="/?date_obtained=asc">Date Obtained</a> | </li>
+    {% endif %}
+    {% if date_obtained %}
+      {% if date_obtained === 'asc' %} <li><a href="/?date_obtained=desc">Date Obtained (descending) </a> | </li> {% endif %}
+      {% if date_obtained === 'desc' %} <li><a href="/?date_obtained=asc">Date Obtained (ascending)</a> | </li> {% endif %}
+    {% endif %}
+
+    {% if !rating %}
+      <li><a href="/?rating=asc">Rating</a> | </li>
+    {% endif %}
+    {% if rating %}
+      {% if rating === 'asc' %} <li><a href="/?rating=desc">Rating (descending) </a> | </li> {% endif %}
+      {% if rating === 'desc' %} <li><a href="/?rating=asc">Rating (ascending)</a> | </li> {% endif %}
+    {% endif %}
+
+    {% if !type %}
+      <li><a href="/?type=asc">Type</a></li>
+    {% endif %}
+    {% if type %}
+      {% if type === 'asc' %} <li><a href="/?type=desc">Type (descending) </a></li> {% endif %}
+      {% if type === 'desc' %} <li><a href="/?type=asc">Type (ascending)</a></li> {% endif %}
+    {% endif %}
+
+    </ul>
     {% for movie in data %}
       <div class="movie">
         <img src="{{ movie.image_url }}" alt="movie poster" height="450" width="300">

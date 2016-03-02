@@ -2,6 +2,16 @@
   color: black;
 }
 
+a:link {
+    text-decoration: none;
+}
+
+li a:hover {
+    color: red;
+    transform: scale(1.5, 1.5);
+    opacity: 1;
+}
+
 body {
   background-color: #2f363d;
 }
@@ -9,12 +19,18 @@ body {
 img {
   border-radius: 3px;
 }
+ul {
+  text-align: center;
+}
+ul li {
+    list-style-type: none;
+    display:inline;
+}
+
 .movie {
   float:left;
   width: 350px;
   height: 580px;
-  /*border: 3px solid red;
-  border-radius: 5px;*/
   position:relative;
   margin: 5px;
   text-align: center;
@@ -22,6 +38,5 @@ img {
 
 .edit {
   position: absolute;
-  right:    ;
   bottom:   0;
 }
