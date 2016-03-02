@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+
+{% block title %}{% endblock %}
+
+
+{% block content %}
+
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/">Movie Inventory</a>
+      </div>
+      <p class="navbar-text navbar-right"><a href="" class="navbar-link">+ New Movie</a></p>
+    </div>
+  </nav>
+  <div class="container">
+    <h1>Edit Movie</h1>
+    <hr>
+    <form class="form-inline" method="POST" action="/movies">
+      <div class="form-group">
+        <label for="exampleInputName2">Title</label>
+        <input type="title" class="form-control" id="title" name="title" value="{{data[0].title}}" required autofocus>
+      </div>
+      <div class="form-group">
+        <label for="imageUrl">Image URL</label>
+        <input type="url" class="form-control" id="imageUrl" name="imageUrl" value="{{data[0].image_url}}"required>
+      </div>
+      <div class="form-group">
+        <label for="type">Type</label>
+        <select id="type" class="form-control" name="type" value="{{data[0].type}}">
+          <option value="DVD" {% if data[0].type === 'DVD' %} selected {% endif %}>DVD</option>
+          <option value="Betamax"{% if data[0].type === 'Betamax' %} selected {% endif %}>Betamax</option>
+          <option value="Blu-ray" {% if data[0].type === 'Blu-ray' %} selected {% endif %}>Blu-ray</option>
+          <option value="VHS"{% if data[0].type === 'VHS' %} selected {% endif %}>VHS</option>
+          <option value="Download (.avi)" {% if data[0].type === 'Download (.avi)' %} selected {% endif %}>Download (.avi)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="year">Year</label>
+        <input type="number" class="form-control" id="year" name="year" value="{{data[0].year}}" required>
+      </div>
+      <div class="form-group">
+        <label for="radio">Rating &nbsp</label>
+        <div class="radio-inline">
+          <label>
+          <input type="radio" name="rating" id="rating1" value="1" required {% if parseInt(data[0].rating) === 1 %} checked {% endif %}>1
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label>
+          <input type="radio" name="rating" id="rating2" value="2" {% if parseInt(data[0].rating) === 2 %} checked {% endif %}>2
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label>
+          <input type="radio" name="rating" id="rating3" value="3"{% if parseInt(data[0].rating) === 3 %} checked {% endif %}>3
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label>
+          <input type="radio" name="rating" id="rating4" value="4"{% if parseInt(data[0].rating) === 4 %} checked {% endif %}>4
+          </label>
+        </div>
+        <div class="radio-inline">
+          <label>
+          <input type="radio" name="rating" id="rating5" value="5"{% if parseInt(data[0].rating) === 5 %} checked {% endif %}>5
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea id="description" name="description" class="form-control" rows="3" required>{{data[0].description}}</textarea>
+      </div>
+      <div class="form-group">
+        <label for="notes">Notes</label>
+        <textarea id="notes" name="notes" class="form-control" rows="3">{{data[0].notes}}</textarea>
+      </div>
+      <button type="submit" class="btn btn-default">Submit Changes</button>
+      <button type="submit" formaction="/movies/{{data[0].id}}/delete"class="btn btn-default">Delete</button>
+    </form>
+  </div>
+
+{% endblock %}

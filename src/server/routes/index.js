@@ -55,4 +55,17 @@ router.get('/movies/:id/edit', function(req, res, next) {
     });
 });
 
+//Deletes a movie from db
+router.post('/movies/:id/delete', function(req, res, next) {
+  db.any('SELECT * FROM movies WHERE id=' + req.params.id)//Returns an array
+    .then(function (data) {//Name the array var "data"
+      console.log(data);
+      res.status(200).redirect('/');
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+});
+
+
 module.exports = router;

@@ -22,8 +22,8 @@
         <h4>{{ movie.title + " (" + movie.year + ")" }}</h4>
         <p>{{movie.type}}</p>
         <p>Rating: {{movie.rating}}</p>
-        <form>
-          <button class="form-control edit" method="GET" action="/movies/{{movie.id}}/edit">Edit</button>
+        <form method="GET" action="/movies/{{movie.id}}/edit">
+          <button class="form-control edit">Edit</button>
         </form>
       </div>
     {% endfor %}
