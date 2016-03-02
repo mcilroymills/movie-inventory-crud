@@ -20,7 +20,7 @@
       <div class="movie">
         <img src="{{ movie.image_url }}" alt="movie poster" height="450" width="300">
         <h4>{{ movie.title + " (" + movie.year + ")" }}</h4>
-        <p>{{movie.type}}
+        <p>{{movie.type}}</p>
         <p>Rating: {{movie.rating}}</p>
         <form>
           <button class="form-control edit" method="GET" action="/movies/{{movie.id}}/edit">Edit</button>

@@ -10,7 +10,7 @@ CREATE TABLE movies (
   image_url varchar(200),
   year int,
   date_obtained date,
-  rating decimal,--between 0 and 10
+  rating int,--(1 through 5)
   notes text,
   type varchar(15)
 
