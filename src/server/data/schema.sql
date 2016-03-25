@@ -9,7 +9,7 @@ CREATE TABLE movies (
   description text,
   image_url varchar(200),
   year int,
-  date_obtained date,
+  date_obtained date not null default CURRENT_DATE,
   rating int,--(1 through 5)
   notes text,
   type varchar(15)

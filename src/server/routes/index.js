@@ -1,6 +1,6 @@
 /* Author: Mills McIlroy
  * Date: March 2, 2016
- * Description: Movie Inventory CRUD assignment. Avoided using any client-side javascript/jQuery!!
+ * Description: Movie Inventory CRUD assignment. Avoided using any client-side javascript!!
  */
 var express = require('express');
 var router = express.Router();
@@ -14,8 +14,8 @@ var db = pgp(connectionString);
 
 //Returns all movies with basic info, allows user to sort
 router.get('/', function(req, res, next) {
-  console.log(req.query);
-  if (req.query.title) {
+  //Queries will only be done if req.query.___ is an appropriate value
+  if (req.query.title === 'asc' || req.query.title === 'desc') {
     db.any('SELECT * FROM movies ORDER BY title ' + req.query.title)
     .then(function (data) {
       res.status(200).render('index', { data:data, title:req.query.title });
@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
       return next(err);
     });
   }
-  else if (req.query.year) {
+  else if (req.query.year === 'asc' || req.query.year === 'desc') {
     db.any('SELECT * FROM movies ORDER BY year ' + req.query.year)
     .then(function (data) {
       res.status(200).render('index', { data:data, year:req.query.year});
@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
       return next(err);
     });
   }
-  else if (req.query.date_obtained) {
+  else if (req.query.date_obtained === 'asc' || req.query.date_obtained === 'desc') {
     db.any('SELECT * FROM movies ORDER BY date_obtained ' + req.query.date_obtained)
     .then(function (data) {
       res.status(200).render('index', { data:data, date_obtained:req.query.date_obtained });
@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
       return next(err);
     });
   }
-  else if (req.query.rating) {
+  else if (req.query.rating === 'asc' || req.query.rating === 'desc') {
     db.any('SELECT * FROM movies ORDER BY rating ' + req.query.rating)
     .then(function (data) {
       res.status(200).render('index', { data:data, rating:req.query.rating });
@@ -51,7 +51,7 @@ router.get('/', function(req, res, next) {
       return next(err);
     });
   }
-  else if (req.query.type) {
+  else if (req.query.type === 'asc' || req.query.type === 'desc') {
     db.any('SELECT * FROM movies ORDER BY type ' + req.query.type)
     .then(function (data) {
       res.status(200).render('index', { data:data, type:req.query.type });
@@ -79,7 +79,7 @@ router.get('/movies/new', function(req, res, next) {
 
 //Goes to edit page
 router.get('/movies/:id/edit', function(req, res, next) {
-  db.any('SELECT * FROM movies WHERE id=' + req.params.id)//Returns an array
+  db.any('SELECT * FROM movies WHERE id=$1', req.params.id)//Returns an array
     .then(function (data) {//Name the array var "data"
       console.log(data);
       res.status(200).render('edit', { data:data });
@@ -91,10 +91,7 @@ router.get('/movies/:id/edit', function(req, res, next) {
 
 //Creates a new movie in database
 router.post('/movies', function(req, res, next) {
-  var thisDay = formatDate();
-  console.log(thisDay);
-  console.log("INSERT INTO movies (title,description,image_url,year,date_obtained,rating,notes,type) VALUES ('" + req.body.title + "','" + req.body.description + "','" + req.body.imageUrl + "'," + req.body.year + ",'" + thisDay + "'," + req.body.rating + ",'" + req.body.notes + "','" + req.body.type + "');");
-  db.any("INSERT INTO movies (title,description,image_url,year,date_obtained,rating,notes,type) VALUES ('" + req.body.title + "','" + req.body.description + "','" + req.body.imageUrl + "'," + req.body.year + ",'" + thisDay + "'," + req.body.rating + ",'" + req.body.notes + "','" + req.body.type + "');")
+  db.none("INSERT INTO movies (title,description,image_url,year,rating,notes,type) VALUES (${title},${description},${image_url},${year},${rating},${notes},${type})", req.body)
     .then(function () {
       res.status(200).redirect('/');
     })
@@ -103,10 +100,9 @@ router.post('/movies', function(req, res, next) {
     });
 });
 
-
 //Updates existing movie in database
 router.post('/movies/:id/edit', function(req, res, next) {
-  db.any("UPDATE movies SET title='" + req.body.title + "',description='" + req.body.description + "',image_url='" + req.body.imageUrl + "',year=" + req.body.year + ",rating=" + req.body.rating + ",notes='" + req.body.notes + "',type='" + req.body.type + "' WHERE id=" + req.params.id)
+  db.none("UPDATE movies SET title=$1,description=$2,image_url=$3,year=$4,rating=$5,notes=$6,type=$7 WHERE id=$8", [req.body.title, req.body.description, req.body.image_url, req.body.year, req.body.rating, req.body.notes, req.body.type, req.params.id])
     .then(function () {
       res.status(200).redirect('/');
     })
@@ -117,7 +113,7 @@ router.post('/movies/:id/edit', function(req, res, next) {
 
 //Deletes a movie from db
 router.post('/movies/:id/delete', function(req, res, next) {
-  db.any('DELETE FROM movies WHERE id=' + req.params.id)
+  db.any('DELETE FROM movies WHERE id=$1', req.params.id)
     .then(function (data) {
       res.status(200).redirect('/');
     })
@@ -125,17 +121,5 @@ router.post('/movies/:id/delete', function(req, res, next) {
       return next(err);
     });
 });
-
-//Returns the current date in sql friendly string format to be
-//used by the add new movie page for date_obtained
-var formatDate = function () {
-  var d = new Date(),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-  if (month.length < 2) month = '0' + month;
-  if (day.length < 2) day = '0' + day;
-  return year + month + day;
-};
 
 module.exports = router;
